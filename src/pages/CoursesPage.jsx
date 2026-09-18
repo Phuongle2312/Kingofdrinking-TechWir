@@ -1,16 +1,14 @@
 import React, { useState } from "react";
-import { useLearning } from "../context/LearningContext";
+import { useLearning, useTutorContext } from "../context/useLearning";
 import { CourseCard } from "../components/CourseCard";
-import { ChatWidget } from "../components/ChatWidget";
 
 export const CoursesPage = () => {
   const { courses } = useLearning();
+  useTutorContext("Tư vấn khóa học");
   const [filter, setFilter] = useState("All");
   const categories = [
     "All",
-    "Frontend Development",
-    "AI & Innovation",
-    "Core JavaScript",
+    ...new Set(courses.map((c) => c.category)),
   ];
 
   const filteredCourses =
@@ -43,13 +41,12 @@ export const CoursesPage = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredCourses.map((course) => (
           <CourseCard key={course.id} course={course} />
         ))}
       </div>
 
-      <ChatWidget currentTopic="Tư vấn khóa học" />
     </div>
   );
 };

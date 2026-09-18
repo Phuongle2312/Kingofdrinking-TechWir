@@ -1,11 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { useLearning } from "../context/LearningContext";
+import { useLearning, useTutorContext } from "../context/useLearning";
 import { CourseCard } from "../components/CourseCard";
-import { ChatWidget } from "../components/ChatWidget";
 
 export const HomePage = () => {
   const { courses } = useLearning();
+  useTutorContext("Tổng quan hệ thống");
 
   return (
     <div>
@@ -24,7 +24,7 @@ export const HomePage = () => {
             Học tập chủ động với lộ trình khóa học thực chiến, tích hợp Trợ lý
             Gia Sư AI Tutor trực tiếp hỗ trợ giải đáp thắc mắc 24/7.
           </p>
-          <div className="mt-8 flex items-center justify-center gap-4">
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
             <Link
               to="/courses"
               className="px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm shadow-md transition"
@@ -42,7 +42,7 @@ export const HomePage = () => {
       </section>
 
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex flex-wrap items-end justify-between gap-2 mb-8">
           <div>
             <h2 className="text-2xl font-bold text-slate-900">
               Khóa Học Tiêu Biểu
@@ -59,14 +59,13 @@ export const HomePage = () => {
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {courses.map((course) => (
             <CourseCard key={course.id} course={course} />
           ))}
         </div>
       </section>
 
-      <ChatWidget currentTopic="Tổng quan hệ thống" />
     </div>
   );
 };

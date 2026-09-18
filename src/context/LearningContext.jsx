@@ -1,96 +1,116 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { COURSES_DATA } from "../data/coursesData";
+import { LearningContext } from "./useLearning";
 
-const LearningContext = createContext();
+const STORAGE_KEYS = {
+  enrolled: "edupulse_enrolled",
+  completed: "edupulse_completed_lessons",
+  quizzes: "edupulse_quiz_scores",
+};
+
+const loadJSON = (key, fallback) => {
+  try {
+    const saved = localStorage.getItem(key);
+    return saved ? JSON.parse(saved) : fallback;
+  } catch {
+    return fallback;
+  }
+};
+
+const saveJSON = (key, value) => {
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+  } catch {
+    // Chế độ ẩn danh hoặc bộ nhớ đầy: bỏ qua, tiến độ chỉ giữ trong phiên.
+  }
+};
 
 export const LearningProvider = ({ children }) => {
-  const [courses] = useState(COURSES_DATA);
+  const courses = COURSES_DATA;
 
-  const [enrolledIds, setEnrolledIds] = useState(() => {
-    try {
-      const saved = localStorage.getItem("edupulse_enrolled");
-      return saved ? JSON.parse(saved) : ["fe-modern-101"];
-    } catch {
-      return ["fe-modern-101"];
-    }
+  const [enrolledIds, setEnrolledIds] = useState(() =>
+    loadJSON(STORAGE_KEYS.enrolled, []),
+  );
+  const [completedLessons, setCompletedLessons] = useState(() =>
+    loadJSON(STORAGE_KEYS.completed, []),
+  );
+  const [quizScores, setQuizScores] = useState(() =>
+    loadJSON(STORAGE_KEYS.quizzes, {}),
+  );
+  const [tutorContext, setTutorContext] = useState({
+    topic: "Tổng quan hệ thống",
+    lesson: "",
   });
 
-  const [completedLessons, setCompletedLessons] = useState(() => {
-    try {
-      const saved = localStorage.getItem("edupulse_completed_lessons");
-      return saved ? JSON.parse(saved) : ["les-1"];
-    } catch {
-      return ["les-1"];
-    }
-  });
+  useEffect(() => saveJSON(STORAGE_KEYS.enrolled, enrolledIds), [enrolledIds]);
+  useEffect(
+    () => saveJSON(STORAGE_KEYS.completed, completedLessons),
+    [completedLessons],
+  );
+  useEffect(() => saveJSON(STORAGE_KEYS.quizzes, quizScores), [quizScores]);
 
-  const [quizScores, setQuizScores] = useState(() => {
-    try {
-      const saved = localStorage.getItem("edupulse_quiz_scores");
-      return saved
-        ? JSON.parse(saved)
-        : { "fe-modern-101": { score: 3, total: 3, passed: true } };
-    } catch {
-      return {};
-    }
-  });
-
-  useEffect(() => {
-    localStorage.setItem("edupulse_enrolled", JSON.stringify(enrolledIds));
-  }, [enrolledIds]);
-
-  useEffect(() => {
-    localStorage.setItem(
-      "edupulse_completed_lessons",
-      JSON.stringify(completedLessons),
+  const enrollCourse = useCallback((courseId) => {
+    setEnrolledIds((prev) =>
+      prev.includes(courseId) ? prev : [...prev, courseId],
     );
-  }, [completedLessons]);
+  }, []);
 
-  useEffect(() => {
-    localStorage.setItem("edupulse_quiz_scores", JSON.stringify(quizScores));
-  }, [quizScores]);
-
-  const enrollCourse = (courseId) => {
-    if (!enrolledIds.includes(courseId)) {
-      setEnrolledIds((prev) => [...prev, courseId]);
-    }
-  };
-
-  const toggleCompleteLesson = (lessonId) => {
+  const toggleCompleteLesson = useCallback((lessonId) => {
     setCompletedLessons((prev) =>
       prev.includes(lessonId)
         ? prev.filter((id) => id !== lessonId)
         : [...prev, lessonId],
     );
-  };
+  }, []);
 
-  const saveQuizResult = (courseId, score, total) => {
-    setQuizScores((prev) => ({
-      ...prev,
-      [courseId]: {
-        score,
-        total,
-        passed: score >= Math.ceil(total * 0.6),
-        date: new Date().toLocaleDateString("vi-VN"),
-      },
-    }));
-  };
+  // Lưu điểm cao nhất, kèm số lần làm bài.
+  const saveQuizResult = useCallback((courseId, score, total) => {
+    setQuizScores((prev) => {
+      const old = prev[courseId];
+      const attempts = (old?.attempts || 0) + 1;
+      const isBetter = !old || score >= old.score;
+      return {
+        ...prev,
+        [courseId]: isBetter
+          ? {
+              score,
+              total,
+              passed: score >= Math.ceil(total * 0.6),
+              date: new Date().toLocaleDateString("vi-VN"),
+              attempts,
+            }
+          : { ...old, attempts },
+      };
+    });
+  }, []);
+
+  const value = useMemo(
+    () => ({
+      courses,
+      enrolledIds,
+      completedLessons,
+      quizScores,
+      enrollCourse,
+      toggleCompleteLesson,
+      saveQuizResult,
+      tutorContext,
+      setTutorContext,
+    }),
+    [
+      courses,
+      enrolledIds,
+      completedLessons,
+      quizScores,
+      enrollCourse,
+      toggleCompleteLesson,
+      saveQuizResult,
+      tutorContext,
+    ],
+  );
 
   return (
-    <LearningContext.Provider
-      value={{
-        courses,
-        enrolledIds,
-        completedLessons,
-        quizScores,
-        enrollCourse,
-        toggleCompleteLesson,
-        saveQuizResult,
-      }}
-    >
+    <LearningContext.Provider value={value}>
       {children}
     </LearningContext.Provider>
   );
 };
-
-export const useLearning = () => useContext(LearningContext);

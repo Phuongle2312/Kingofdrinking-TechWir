@@ -3,7 +3,6 @@ export const COURSES_DATA = [
     id: "fe-modern-101",
     title: "Lập Trình Web Hiện Đại với React & Tailwind",
     level: "Cơ bản - Trung cấp",
-    duration: "12 bài học (6 giờ)",
     instructor: "Giảng viên FPT Aptech",
     category: "Frontend Development",
     rating: 4.9,
@@ -40,7 +39,6 @@ export const COURSES_DATA = [
     id: "ai-prompt-201",
     title: "Ứng Dụng GenAI & Gemini API Trong Phát Triển Web",
     level: "Trung cấp",
-    duration: "8 bài học (4.5 giờ)",
     instructor: "Chuyên gia AI Lab FPT",
     category: "AI & Innovation",
     rating: 4.85,
@@ -60,7 +58,7 @@ export const COURSES_DATA = [
       {
         id: "les-5",
         title: "Bài 2: Gọi Gemini API trực tiếp từ Client và quản lý Context",
-        videoUrl: "https://www.youtube.com/embed/b0WpZ1XG3oU",
+        videoUrl: "https://www.youtube.com/embed/a-zakrDShRc",
         notes:
           "Quản lý Chat Token, xử lý timeout và fallback khi gián đoạn mạng.",
       },
@@ -70,7 +68,6 @@ export const COURSES_DATA = [
     id: "js-mastery-301",
     title: "JavaScript ES6+ Chuyên Sâu & Bất Đồng Bộ",
     level: "Nâng cao",
-    duration: "10 bài học (5 giờ)",
     instructor: "Mentor Techwir",
     category: "Core JavaScript",
     rating: 4.95,

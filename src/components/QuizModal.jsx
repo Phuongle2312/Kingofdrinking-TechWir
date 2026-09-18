@@ -1,36 +1,78 @@
-import React, { useState } from "react";
-import { useLearning } from "../context/LearningContext";
+import React, { useState, useEffect, useRef } from "react";
+import { useLearning } from "../context/useLearning";
 
 export const QuizModal = ({ courseId, questions, onClose }) => {
   const { saveQuizResult } = useLearning();
   const [currentIdx, setCurrentIdx] = useState(0);
   const [selectedOptions, setSelectedOptions] = useState({});
-  const [isFinished, setIsFinished] = useState(false);
+  const [score, setScore] = useState(null);
+  const dialogRef = useRef(null);
+
+  const isFinished = score !== null;
+  const total = questions.length;
+  const passed = isFinished && score >= Math.ceil(total * 0.6);
+
+  // Giữ onClose mới nhất trong ref để effect chỉ chạy một lần khi mở modal.
+  const onCloseRef = useRef(onClose);
+  useEffect(() => {
+    onCloseRef.current = onClose;
+  }, [onClose]);
+
+  useEffect(() => {
+    const onKeyDown = (e) => {
+      if (e.key === "Escape") onCloseRef.current();
+    };
+    document.addEventListener("keydown", onKeyDown);
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    dialogRef.current?.focus();
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+      document.body.style.overflow = prevOverflow;
+    };
+  }, []);
 
   const handleSelect = (optionIdx) => {
     setSelectedOptions((prev) => ({ ...prev, [currentIdx]: optionIdx }));
   };
 
   const handleNext = () => {
-    if (currentIdx < questions.length - 1) {
+    if (currentIdx < total - 1) {
       setCurrentIdx((prev) => prev + 1);
-    } else {
-      let score = 0;
-      questions.forEach((q, idx) => {
-        if (selectedOptions[idx] === q.correctAnswer) score += 1;
-      });
-      saveQuizResult(courseId, score, questions.length);
-      setIsFinished(true);
+      return;
     }
+    const result = questions.reduce(
+      (acc, q, idx) => acc + (selectedOptions[idx] === q.correctAnswer ? 1 : 0),
+      0,
+    );
+    saveQuizResult(courseId, result, total);
+    setScore(result);
+  };
+
+  const handleRetry = () => {
+    setSelectedOptions({});
+    setCurrentIdx(0);
+    setScore(null);
   };
 
   const q = questions[currentIdx];
 
   return (
-    <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl relative">
+    <div
+      className="fixed inset-0 z-[60] bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4"
+      onClick={(e) => e.target === e.currentTarget && onClose()}
+    >
+      <div
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="quiz-title"
+        tabIndex={-1}
+        className="bg-white rounded-2xl max-w-lg w-full max-h-[90dvh] overflow-y-auto p-6 shadow-2xl relative focus:outline-none"
+      >
         <button
           onClick={onClose}
+          aria-label="Đóng bài kiểm tra"
           className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 text-xl font-bold"
         >
           ✕
@@ -38,60 +80,122 @@ export const QuizModal = ({ courseId, questions, onClose }) => {
 
         {!isFinished ? (
           <div>
-            <div className="flex items-center justify-between text-xs font-bold text-blue-600 uppercase tracking-wider mb-2">
-              <span>Trắc Nghiệm Ôn Tập</span>
+            <div className="flex items-center justify-between text-xs font-bold text-blue-600 uppercase tracking-wider mb-2 pr-8">
+              <span id="quiz-title">Trắc Nghiệm Ôn Tập</span>
               <span>
-                Câu {currentIdx + 1}/{questions.length}
+                Câu {currentIdx + 1}/{total}
               </span>
             </div>
-            <h3 className="font-bold text-slate-900 text-base mb-4">
+            <div className="w-full bg-slate-100 rounded-full h-1.5 mb-4 overflow-hidden">
+              <div
+                className="bg-blue-600 h-1.5 transition-all"
+                style={{ width: `${((currentIdx + 1) / total) * 100}%` }}
+              />
+            </div>
+            <h3 className="font-bold text-slate-900 text-base mb-4 whitespace-pre-line">
               {q.question}
             </h3>
-            <div className="space-y-2 mb-6">
-              {q.options.map((opt, optIdx) => (
-                <button
-                  key={optIdx}
-                  onClick={() => handleSelect(optIdx)}
-                  className={`w-full text-left p-3 rounded-xl border text-sm transition ${
-                    selectedOptions[currentIdx] === optIdx
-                      ? "border-blue-600 bg-blue-50 font-medium text-blue-800"
-                      : "border-slate-200 hover:border-slate-300 text-slate-700"
-                  }`}
-                >
-                  <span className="font-bold mr-2">
-                    {String.fromCharCode(65 + optIdx)}.
-                  </span>{" "}
-                  {opt}
-                </button>
-              ))}
+            <div className="space-y-2 mb-6" role="radiogroup">
+              {q.options.map((opt, optIdx) => {
+                const selected = selectedOptions[currentIdx] === optIdx;
+                return (
+                  <button
+                    key={optIdx}
+                    role="radio"
+                    aria-checked={selected}
+                    onClick={() => handleSelect(optIdx)}
+                    className={`w-full text-left p-3 rounded-xl border text-sm transition ${
+                      selected
+                        ? "border-blue-600 bg-blue-50 font-medium text-blue-800"
+                        : "border-slate-200 hover:border-slate-300 text-slate-700"
+                    }`}
+                  >
+                    <span className="font-bold mr-2">
+                      {String.fromCharCode(65 + optIdx)}.
+                    </span>
+                    {opt}
+                  </button>
+                );
+              })}
             </div>
-            <div className="flex justify-end">
+            <div className="flex justify-between gap-3">
+              <button
+                disabled={currentIdx === 0}
+                onClick={() => setCurrentIdx((prev) => prev - 1)}
+                className="px-4 py-2.5 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 disabled:opacity-40 text-sm font-semibold transition"
+              >
+                ← Câu trước
+              </button>
               <button
                 disabled={selectedOptions[currentIdx] === undefined}
                 onClick={handleNext}
                 className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white text-sm font-semibold transition"
               >
-                {currentIdx === questions.length - 1
-                  ? "Nộp bài & Xem điểm"
-                  : "Câu tiếp theo →"}
+                {currentIdx === total - 1 ? "Nộp bài & Xem điểm" : "Câu tiếp theo →"}
               </button>
             </div>
           </div>
         ) : (
-          <div className="text-center py-4">
-            <div className="text-5xl mb-3">🎉</div>
-            <h3 className="text-xl font-bold text-slate-900 mb-1">
-              Đã Hoàn Thành Bài Kiểm Tra!
-            </h3>
-            <p className="text-sm text-slate-600 mb-6">
-              Điểm số đã được lưu vào bảng tiến độ cá nhân của bạn.
-            </p>
-            <button
-              onClick={onClose}
-              className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold text-sm transition"
-            >
-              Quay Lại Bài Học
-            </button>
+          <div>
+            <div className="text-center py-2">
+              <div className="text-5xl mb-3">{passed ? "🎉" : "💪"}</div>
+              <h3 id="quiz-title" className="text-xl font-bold text-slate-900 mb-1">
+                {passed ? "Chúc mừng, bạn đã đạt!" : "Chưa đạt, cố lên nhé!"}
+              </h3>
+              <p className="text-3xl font-extrabold mt-2 mb-1 text-blue-600">
+                {score}/{total}
+              </p>
+              <p className="text-xs text-slate-500 mb-5">
+                Cần đúng tối thiểu {Math.ceil(total * 0.6)}/{total} câu để đạt.
+                Điểm cao nhất được lưu vào bảng tiến độ.
+              </p>
+            </div>
+
+            <div className="space-y-3 mb-6">
+              {questions.map((item, idx) => {
+                const correct = selectedOptions[idx] === item.correctAnswer;
+                return (
+                  <div
+                    key={item.id}
+                    className={`p-3 rounded-xl border text-sm ${
+                      correct
+                        ? "border-emerald-200 bg-emerald-50"
+                        : "border-rose-200 bg-rose-50"
+                    }`}
+                  >
+                    <p className="font-semibold text-slate-900 whitespace-pre-line">
+                      {correct ? "✓" : "✗"} Câu {idx + 1}: {item.question}
+                    </p>
+                    {!correct && (
+                      <p className="text-rose-700 mt-1">
+                        Bạn chọn: {item.options[selectedOptions[idx]]}
+                      </p>
+                    )}
+                    <p className="text-emerald-700 mt-1">
+                      Đáp án: {item.options[item.correctAnswer]}
+                    </p>
+                    {item.explanation && (
+                      <p className="text-slate-600 mt-1">💡 {item.explanation}</p>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+
+            <div className="flex gap-3">
+              <button
+                onClick={handleRetry}
+                className="flex-1 py-3 border border-slate-200 hover:bg-slate-50 text-slate-700 rounded-xl font-semibold text-sm transition"
+              >
+                Làm Lại
+              </button>
+              <button
+                onClick={onClose}
+                className="flex-1 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold text-sm transition"
+              >
+                Quay Lại Bài Học
+              </button>
+            </div>
           </div>
         )}
       </div>

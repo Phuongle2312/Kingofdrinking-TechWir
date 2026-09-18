@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { useLearning } from "../context/LearningContext";
+import { useLearning } from "../context/useLearning";
 
 export const CourseCard = ({ course }) => {
   const { enrolledIds, enrollCourse } = useLearning();
@@ -12,6 +12,7 @@ export const CourseCard = ({ course }) => {
         <img
           src={course.thumbnail}
           alt={course.title}
+          loading="lazy"
           className="w-full h-full object-cover"
         />
         <span className="absolute top-3 left-3 bg-white/90 backdrop-blur px-2.5 py-1 rounded-full text-xs font-semibold text-blue-700 shadow-sm">
@@ -25,7 +26,7 @@ export const CourseCard = ({ course }) => {
             <span>
               ⭐ {course.rating} ({course.studentsCount} học viên)
             </span>
-            <span>⏱️ {course.duration}</span>
+            <span>📶 {course.level}</span>
           </div>
           <h3 className="font-bold text-slate-900 text-lg line-clamp-2 mb-2">
             {course.title}
