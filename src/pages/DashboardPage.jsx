@@ -5,7 +5,7 @@ import { useLearning, useTutorContext } from "../context/useLearning";
 
 export const DashboardPage = () => {
   const { courses, enrolledIds, completedLessons, quizScores } = useLearning();
-  useTutorContext("Theo dõi tiến độ học tập");
+  useTutorContext("Bảng tiến độ học tập");
 
   const enrolledCourses = courses.filter((c) => enrolledIds.includes(c.id));
   const enrolledLessons = enrolledCourses.flatMap((c) => c.lessons);

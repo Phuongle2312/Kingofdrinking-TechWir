@@ -38,7 +38,7 @@ export const LearningProvider = ({ children }) => {
     loadJSON(STORAGE_KEYS.quizzes, {}),
   );
   const [tutorContext, setTutorContext] = useState({
-    topic: "Tổng quan hệ thống",
+    topic: "Trang chủ",
     lesson: "",
   });
   const [chatOpen, setChatOpen] = useState(false);

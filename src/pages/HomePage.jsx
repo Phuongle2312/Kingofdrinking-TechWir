@@ -42,7 +42,7 @@ const features = [
 
 export const HomePage = () => {
   const { courses, setChatOpen } = useLearning();
-  useTutorContext("Tổng quan hệ thống");
+  useTutorContext("Trang chủ");
 
   const featured = [...courses]
     .sort((a, b) => b.rating - a.rating)

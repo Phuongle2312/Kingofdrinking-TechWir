@@ -59,3 +59,14 @@
     scroll-behavior: auto;
   }
 }
+
+/* Thanh cuộn mảnh, tự đổi màu theo chế độ sáng / tối. */
+@utility scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-slate-300) transparent;
+}
+
+@utility scrollbar-thin-dark {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-gray-600) transparent;
+}

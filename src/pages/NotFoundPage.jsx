@@ -6,7 +6,7 @@ export const NotFoundPage = ({
   title = "Không tìm thấy trang",
   message = "Đường dẫn bạn truy cập không tồn tại hoặc đã bị thay đổi.",
 }) => {
-  useTutorContext("Tổng quan hệ thống");
+  useTutorContext("Trang chủ");
 
   return (
     <div className="max-w-xl mx-auto px-4 py-20 text-center">

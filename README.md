@@ -8,7 +8,7 @@ Nền tảng học lập trình web tích hợp **gia sư AI (Google Gemini)**, 
 - **Phòng học**: xem video bài giảng, ghi chú trọng tâm, đánh dấu hoàn thành, chuyển bài trước/sau.
 - **Mini-quiz**: chấm điểm tự động, hiển thị đáp án và giải thích, cho phép làm lại (lưu điểm cao nhất).
 - **Bảng tiến độ**: số khóa đang học, số bài đã hoàn thành, điểm quiz từng khóa.
-- **AI Tutor**: khung chat nổi trên mọi trang, tự nhận biết khóa/bài đang học, hiển thị code block.
+- **AI Tutor**: khung chat nổi trên mọi trang, biết bạn đang ở trang / bài học nào và danh mục khóa học để tư vấn; câu trả lời hiện dần (streaming), hiển thị markdown và khối code có nút sao chép; có nút dừng, thử lại, xóa hội thoại; lịch sử chat được lưu trong trình duyệt.
 - **Giao diện sáng/tối**: tự theo hệ điều hành, có nút chuyển trên thanh điều hướng.
 
 Tiến độ học tập được lưu trong `localStorage` của trình duyệt (không cần backend).
@@ -51,11 +51,11 @@ npm run dev
 
 ```
 src/
-├── components/   # Navbar, Footer, CourseCard, QuizModal, ChatWidget
+├── components/   # Navbar, Footer, CourseCard, QuizModal, ChatWidget, ChatMarkdown, ThemeToggle
 ├── context/      # LearningProvider (state + localStorage) và hook useLearning
 ├── data/         # Dữ liệu khóa học và câu hỏi quiz
 ├── pages/        # Home, Courses, StudyRoom, Dashboard, NotFound
-├── services/     # geminiService: gọi Gemini API
+├── services/     # geminiService: gọi Gemini API (streaming)
 ├── App.jsx       # Router + lazy-load các trang
 └── main.jsx
 ```

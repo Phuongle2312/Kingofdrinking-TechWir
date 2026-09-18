@@ -4,7 +4,7 @@ import { CourseCard } from "../components/CourseCard";
 
 export const CoursesPage = () => {
   const { courses } = useLearning();
-  useTutorContext("Tư vấn khóa học");
+  useTutorContext("Thư viện khóa học");
   const [filter, setFilter] = useState("All");
   const categories = ["All", ...new Set(courses.map((c) => c.category))];
 
