@@ -34,7 +34,7 @@ npm run dev
 | Biến | Bắt buộc | Mô tả |
 | --- | --- | --- |
 | `VITE_GEMINI_API_KEY` | Có (để dùng AI Tutor) | Lấy tại [Google AI Studio](https://aistudio.google.com/apikey) |
-| `VITE_GEMINI_MODEL` | Không | Mặc định `gemini-2.5-flash` |
+| `VITE_GEMINI_MODEL` | Không | Mặc định `gemini-3.6-flash` |
 
 > ⚠️ `.env` đã nằm trong `.gitignore`, **không commit file này**. Lưu ý: biến có tiền tố `VITE_` sẽ được đóng gói vào mã JS phía client, nên ai mở trang web cũng có thể xem được key. Chỉ dùng key có giới hạn hạn mức / giới hạn domain cho bản demo; nếu triển khai thật, hãy gọi Gemini qua một serverless proxy.
 

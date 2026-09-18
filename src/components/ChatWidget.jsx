@@ -29,6 +29,14 @@ const renderInline = (text, keyPrefix) =>
     return part;
   });
 
+// Bỏ dòng trống sát khối code để tránh khoảng cách thừa.
+const trimAroundCode = (seg, i, count) => {
+  let out = seg;
+  if (i > 0) out = out.replace(/^\n+/, "");
+  if (i < count - 1) out = out.replace(/\n+$/, "");
+  return out;
+};
+
 const MessageText = ({ text }) => {
   const segments = text.split(/```[\w-]*\n?([\s\S]*?)```/g);
   return segments.map((seg, i) =>
@@ -40,7 +48,9 @@ const MessageText = ({ text }) => {
         <code>{seg.replace(/\n$/, "")}</code>
       </pre>
     ) : (
-      <span key={i}>{renderInline(seg, i)}</span>
+      <span key={i}>
+        {renderInline(trimAroundCode(seg, i, segments.length), i)}
+      </span>
     ),
   );
 };
@@ -156,8 +166,7 @@ export const ChatWidget = () => {
             aria-live="polite"
           >
             <div className="p-3 rounded-2xl max-w-[85%] mr-auto bg-surface border border-slate-200 text-slate-800 rounded-tl-none shadow-sm text-[13px] leading-relaxed">
-              👋 Chào bạn! Tôi là Trợ Lý Gia Sư AI. Bạn đang ở: "{contextLabel}
-              ". Cần tôi giải thích đoạn code nào hoặc tóm tắt kiến thức không?
+              {`👋 Chào bạn! Tôi là Trợ Lý Gia Sư AI. Bạn đang ở: "${contextLabel}". Cần tôi giải thích đoạn code nào hoặc tóm tắt kiến thức không?`}
             </div>
 
             {messages.map((m, idx) =>
