@@ -9,6 +9,21 @@
       name="description"
       content="EduPulse AI – nền tảng học lập trình web tích hợp gia sư AI (Gemini), theo dõi tiến độ và mini-quiz. Dự án FPT Techwir: Web Innovation Unleashed."
     />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <script>
+      // Áp dụng theme trước khi render để tránh nháy màu.
+      try {
+        var t = localStorage.getItem("edupulse_theme");
+        if (t === "dark" || (!t && matchMedia("(prefers-color-scheme: dark)").matches)) {
+          document.documentElement.classList.add("dark");
+        }
+      } catch (e) {}
+    </script>
     <title>EduPulse AI – Học Công Nghệ Cùng Gia Sư AI</title>
   </head>
   <body>

@@ -4,11 +4,11 @@ export const COURSES_DATA = [
     title: "Lập Trình Web Hiện Đại với React & Tailwind",
     level: "Cơ bản - Trung cấp",
     instructor: "Giảng viên FPT Aptech",
-    category: "Frontend Development",
+    category: "Lập Trình Frontend",
     rating: 4.9,
     studentsCount: 1240,
     thumbnail:
-      "https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=800&auto=format&fit=crop&q=80",
+      "https://images.unsplash.com/photo-1619410283995-43d9134e7656?w=800&auto=format&fit=crop&q=80",
     description:
       "Khóa học rèn luyện tư duy component, quản lý state với Hooks, context API và tối ưu giao diện linh hoạt chuẩn dự án Techwir.",
     lessons: [
@@ -40,11 +40,11 @@ export const COURSES_DATA = [
     title: "Ứng Dụng GenAI & Gemini API Trong Phát Triển Web",
     level: "Trung cấp",
     instructor: "Chuyên gia AI Lab FPT",
-    category: "AI & Innovation",
+    category: "AI & Đổi Mới",
     rating: 4.85,
     studentsCount: 980,
     thumbnail:
-      "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&auto=format&fit=crop&q=80",
+      "https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=800&auto=format&fit=crop&q=80",
     description:
       "Tích hợp mô hình ngôn ngữ lớn (LLM) vào ứng dụng Client-side: kỹ thuật Prompt, streaming và tạo AI Tutor tự động.",
     lessons: [
@@ -69,11 +69,11 @@ export const COURSES_DATA = [
     title: "JavaScript ES6+ Chuyên Sâu & Bất Đồng Bộ",
     level: "Nâng cao",
     instructor: "Mentor Techwir",
-    category: "Core JavaScript",
+    category: "JavaScript Cốt Lõi",
     rating: 4.95,
     studentsCount: 2150,
     thumbnail:
-      "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&auto=format&fit=crop&q=80",
+      "https://images.unsplash.com/photo-1627398242454-45a1465c2479?w=800&auto=format&fit=crop&q=80",
     description:
       "Làm chủ Promise, Async/Await, Event Loop, Closures và xử lý cấu trúc dữ liệu mảng nâng cao.",
     lessons: [

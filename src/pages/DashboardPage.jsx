@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { Target, ArrowRight } from "lucide-react";
 import { useLearning, useTutorContext } from "../context/useLearning";
 
 export const DashboardPage = () => {
@@ -27,33 +28,33 @@ export const DashboardPage = () => {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-10">
-        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+        <div className="bg-surface p-6 rounded-2xl border border-slate-200 shadow-sm">
           <span className="text-xs font-bold text-slate-400 uppercase">
             Khóa Đang Học
           </span>
-          <p className="text-3xl font-extrabold text-blue-600 mt-2">
+          <p className="text-3xl font-extrabold text-blue-600 dark:text-blue-400 mt-2">
             {enrolledCourses.length}
           </p>
         </div>
-        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+        <div className="bg-surface p-6 rounded-2xl border border-slate-200 shadow-sm">
           <span className="text-xs font-bold text-slate-400 uppercase">
             Bài Học Hoàn Thành
           </span>
-          <p className="text-3xl font-extrabold text-emerald-600 mt-2">
+          <p className="text-3xl font-extrabold text-emerald-600 dark:text-emerald-400 mt-2">
             {finishedLessons} / {totalLessons}
           </p>
         </div>
-        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+        <div className="bg-surface p-6 rounded-2xl border border-slate-200 shadow-sm">
           <span className="text-xs font-bold text-slate-400 uppercase">
             Tổng Tiến Độ
           </span>
-          <p className="text-3xl font-extrabold text-indigo-600 mt-2">
+          <p className="text-3xl font-extrabold text-indigo-600 dark:text-indigo-400 mt-2">
             {completionPercentage}%
           </p>
         </div>
       </div>
 
-      <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm mb-10">
+      <div className="bg-surface p-6 rounded-2xl border border-slate-200 shadow-sm mb-10">
         <h2 className="text-lg font-bold text-slate-900 mb-4">
           Các Khóa Học Của Bạn
         </h2>
@@ -92,15 +93,22 @@ export const DashboardPage = () => {
                     </h3>
                     <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-500 mt-1">
                       <span>
-                        Đã học {finishedInCourse}/{c.lessons.length} bài ({percent}%)
+                        Đã học {finishedInCourse}/{c.lessons.length} bài (
+                        {percent}%)
                       </span>
                       {testScore && (
                         <span
                           className={`font-semibold ${
-                            testScore.passed ? "text-emerald-700" : "text-amber-700"
+                            testScore.passed
+                              ? "text-emerald-700"
+                              : "text-amber-700"
                           }`}
                         >
-                          🎯 Quiz: {testScore.score}/{testScore.total} —{" "}
+                          <Target
+                            className="w-3.5 h-3.5 inline -mt-0.5 mr-1"
+                            aria-hidden="true"
+                          />
+                          Quiz: {testScore.score}/{testScore.total} —{" "}
                           {testScore.passed ? "Đạt" : "Chưa đạt"}
                         </span>
                       )}
@@ -122,9 +130,14 @@ export const DashboardPage = () => {
 
                   <Link
                     to={`/study/${c.id}`}
-                    className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-semibold transition whitespace-nowrap"
+                    className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-semibold transition whitespace-nowrap inline-flex items-center gap-1.5"
                   >
-                    {percent === 100 ? "Ôn Tập →" : "Vào Học →"}
+                    {percent === 100
+                      ? "Ôn Tập"
+                      : percent > 0
+                        ? "Học Tiếp"
+                        : "Bắt Đầu Học"}
+                    <ArrowRight className="w-4 h-4" aria-hidden="true" />
                   </Link>
                 </div>
               );

@@ -64,7 +64,8 @@ export const QUIZ_DATABASE = {
   "js-mastery-301": [
     {
       id: "q6",
-      question: "Đoạn code sau in ra thứ tự nào?\nconsole.log('A'); setTimeout(() => console.log('B'), 0); Promise.resolve().then(() => console.log('C')); console.log('D');",
+      question:
+        "Đoạn code sau in ra thứ tự nào?\nconsole.log('A'); setTimeout(() => console.log('B'), 0); Promise.resolve().then(() => console.log('C')); console.log('D');",
       options: ["A B C D", "A D C B", "A D B C", "A C D B"],
       correctAnswer: 1,
       explanation:

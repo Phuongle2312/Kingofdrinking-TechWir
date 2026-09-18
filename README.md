@@ -9,12 +9,15 @@ Nền tảng học lập trình web tích hợp **gia sư AI (Google Gemini)**, 
 - **Mini-quiz**: chấm điểm tự động, hiển thị đáp án và giải thích, cho phép làm lại (lưu điểm cao nhất).
 - **Bảng tiến độ**: số khóa đang học, số bài đã hoàn thành, điểm quiz từng khóa.
 - **AI Tutor**: khung chat nổi trên mọi trang, tự nhận biết khóa/bài đang học, hiển thị code block.
+- **Giao diện sáng/tối**: tự theo hệ điều hành, có nút chuyển trên thanh điều hướng.
 
 Tiến độ học tập được lưu trong `localStorage` của trình duyệt (không cần backend).
 
 ## Công nghệ
 
-React 19 · Vite 8 · React Router 7 · Tailwind CSS 4 · Gemini API · Oxlint
+React 19 · Vite 8 · React Router 7 · Tailwind CSS 4 · lucide-react · Gemini API · Oxlint
+
+Font: [Be Vietnam Pro](https://fonts.google.com/specimen/Be+Vietnam+Pro) (Google Fonts).
 
 ## Cài đặt & chạy
 

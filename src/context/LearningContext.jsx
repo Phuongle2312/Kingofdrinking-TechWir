@@ -41,6 +41,7 @@ export const LearningProvider = ({ children }) => {
     topic: "Tổng quan hệ thống",
     lesson: "",
   });
+  const [chatOpen, setChatOpen] = useState(false);
 
   useEffect(() => saveJSON(STORAGE_KEYS.enrolled, enrolledIds), [enrolledIds]);
   useEffect(
@@ -95,6 +96,8 @@ export const LearningProvider = ({ children }) => {
       saveQuizResult,
       tutorContext,
       setTutorContext,
+      chatOpen,
+      setChatOpen,
     }),
     [
       courses,
@@ -105,6 +108,7 @@ export const LearningProvider = ({ children }) => {
       toggleCompleteLesson,
       saveQuizResult,
       tutorContext,
+      chatOpen,
     ],
   );
 

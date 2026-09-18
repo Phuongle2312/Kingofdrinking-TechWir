@@ -1,1 +1,61 @@
 @import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: "Be Vietnam Pro", ui-sans-serif, system-ui, sans-serif;
+  /* Nền của thẻ / panel: trắng ở chế độ sáng, xanh đen ở chế độ tối. */
+  --color-surface: #ffffff;
+}
+
+/*
+ * Chế độ tối: đảo thang màu slate và các màu nhạt (tint) thay vì thêm
+ * dark: vào từng class. Các màu đậm dùng cho nút (blue-600, emerald-600...)
+ * giữ nguyên. Nền tối cố định thì dùng gray-* / black (không bị đảo).
+ */
+.dark {
+  color-scheme: dark;
+
+  --color-surface: oklch(20.8% 0.042 265.755);
+
+  --color-slate-50: oklch(12.9% 0.042 264.695);
+  --color-slate-100: oklch(25% 0.042 263);
+  --color-slate-200: oklch(29% 0.041 260.031);
+  --color-slate-300: oklch(37.2% 0.044 257.287);
+  --color-slate-400: oklch(55.4% 0.046 257.417);
+  --color-slate-500: oklch(70.4% 0.04 256.788);
+  --color-slate-600: oklch(80% 0.03 255);
+  --color-slate-700: oklch(88% 0.02 253);
+  --color-slate-800: oklch(92.9% 0.013 255.508);
+  --color-slate-900: oklch(96.8% 0.007 247.896);
+  --color-slate-950: oklch(98.4% 0.003 247.858);
+
+  --color-blue-50: oklch(28.2% 0.091 267.935 / 0.6);
+  --color-blue-100: oklch(37.9% 0.146 265.522 / 0.6);
+  --color-blue-200: oklch(42.4% 0.199 265.638 / 0.7);
+  --color-blue-700: oklch(80.9% 0.105 251.813);
+  --color-blue-800: oklch(88.2% 0.059 254.128);
+
+  --color-emerald-50: oklch(26.2% 0.051 172.552 / 0.6);
+  --color-emerald-100: oklch(37.8% 0.077 168.94 / 0.6);
+  --color-emerald-200: oklch(43.2% 0.095 166.913 / 0.7);
+  --color-emerald-700: oklch(84.5% 0.143 164.978);
+  --color-emerald-800: oklch(90.5% 0.093 164.15);
+
+  --color-amber-50: oklch(27.9% 0.077 45.635 / 0.6);
+  --color-amber-200: oklch(47.3% 0.137 46.201 / 0.7);
+  --color-amber-700: oklch(87.9% 0.169 91.605);
+  --color-amber-900: oklch(96.2% 0.059 95.617);
+
+  --color-rose-50: oklch(27.1% 0.105 12.094 / 0.6);
+  --color-rose-200: oklch(45.5% 0.188 13.697 / 0.7);
+  --color-rose-700: oklch(81% 0.117 11.638);
+
+  --color-indigo-50: oklch(25.7% 0.09 281.288 / 0.6);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}

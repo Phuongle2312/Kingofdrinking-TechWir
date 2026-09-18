@@ -6,10 +6,7 @@ export const CoursesPage = () => {
   const { courses } = useLearning();
   useTutorContext("Tư vấn khóa học");
   const [filter, setFilter] = useState("All");
-  const categories = [
-    "All",
-    ...new Set(courses.map((c) => c.category)),
-  ];
+  const categories = ["All", ...new Set(courses.map((c) => c.category))];
 
   const filteredCourses =
     filter === "All" ? courses : courses.filter((c) => c.category === filter);
@@ -32,7 +29,7 @@ export const CoursesPage = () => {
               className={`px-4 py-2 rounded-xl text-xs font-semibold transition ${
                 filter === cat
                   ? "bg-blue-600 text-white shadow-sm"
-                  : "bg-white border border-slate-200 text-slate-600 hover:bg-slate-100"
+                  : "bg-surface border border-slate-200 text-slate-600 hover:bg-slate-100"
               }`}
             >
               {cat === "All" ? "Tất Cả" : cat}
@@ -46,7 +43,6 @@ export const CoursesPage = () => {
           <CourseCard key={course.id} course={course} />
         ))}
       </div>
-
     </div>
   );
 };

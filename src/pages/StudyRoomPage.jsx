@@ -1,5 +1,12 @@
 import React, { useState, useCallback } from "react";
 import { useParams, Link } from "react-router-dom";
+import {
+  Check,
+  ClipboardList,
+  StickyNote,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 import { useLearning, useTutorContext } from "../context/useLearning";
 import { QUIZ_DATABASE } from "../data/quizData";
 import { QuizModal } from "../components/QuizModal";
@@ -52,7 +59,7 @@ const EnrollGate = ({ course }) => {
         </button>
         <Link
           to="/courses"
-          className="px-5 py-2.5 rounded-xl bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 text-sm font-semibold transition"
+          className="px-5 py-2.5 rounded-xl bg-surface border border-slate-300 hover:bg-slate-50 text-slate-700 text-sm font-semibold transition"
         >
           Xem Khóa Khác
         </Link>
@@ -94,12 +101,17 @@ const StudyRoom = ({ course }) => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs text-slate-500 mb-6 min-w-0">
+      <nav
+        aria-label="Breadcrumb"
+        className="flex items-center gap-2 text-xs text-slate-500 mb-6 min-w-0"
+      >
         <Link to="/courses" className="hover:underline shrink-0">
           Khóa học
         </Link>
         <span>/</span>
-        <span className="font-semibold text-slate-800 truncate">{course.title}</span>
+        <span className="font-semibold text-slate-800 truncate">
+          {course.title}
+        </span>
       </nav>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -116,7 +128,7 @@ const StudyRoom = ({ course }) => {
             />
           </div>
 
-          <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="bg-surface p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div>
               <h2 className="text-xl font-bold text-slate-900">
                 {activeLesson.title}
@@ -126,7 +138,7 @@ const StudyRoom = ({ course }) => {
               </p>
             </div>
 
-            <div className="flex flex-wrap items-center gap-3">
+            <div className="flex flex-wrap sm:flex-nowrap items-center gap-3 shrink-0">
               <button
                 onClick={() => toggleCompleteLesson(activeLesson.id)}
                 aria-pressed={isCompleted}
@@ -136,23 +148,33 @@ const StudyRoom = ({ course }) => {
                     : "bg-blue-600 text-white hover:bg-blue-700"
                 }`}
               >
-                {isCompleted ? "✓ Đã Hoàn Thành" : "Đánh Dấu Hoàn Thành"}
+                {isCompleted ? (
+                  <>
+                    <Check className="w-4 h-4" /> Đã Hoàn Thành
+                  </>
+                ) : (
+                  "Đánh Dấu Hoàn Thành"
+                )}
               </button>
 
               {quizQuestions && (
                 <button
                   onClick={() => setShowQuiz(true)}
-                  className="px-4 py-2.5 rounded-xl text-xs font-semibold bg-amber-500 hover:bg-amber-600 text-white transition"
+                  className="px-4 py-2.5 rounded-xl text-xs font-semibold bg-amber-500 hover:bg-amber-600 text-white transition flex items-center gap-2"
                 >
-                  📝 Làm Mini-Quiz
+                  <ClipboardList className="w-4 h-4" /> Làm Mini-Quiz
                 </button>
               )}
             </div>
           </div>
 
-          <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-            <h3 className="font-bold text-slate-900 text-sm mb-2">
-              📌 Ghi Chú Trọng Tâm:
+          <div className="bg-surface p-6 rounded-2xl border border-slate-200 shadow-sm">
+            <h3 className="font-bold text-slate-900 text-sm mb-2 flex items-center gap-2">
+              <StickyNote
+                className="w-4 h-4 text-amber-500"
+                aria-hidden="true"
+              />{" "}
+              Ghi Chú Trọng Tâm
             </h3>
             <p className="text-slate-600 text-sm leading-relaxed">
               {activeLesson.notes}
@@ -163,21 +185,21 @@ const StudyRoom = ({ course }) => {
             <button
               onClick={() => goTo(activeLessonIdx - 1)}
               disabled={!hasPrev}
-              className="px-4 py-2.5 rounded-xl text-xs font-semibold border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 disabled:opacity-40 transition"
+              className="px-4 py-2.5 rounded-xl text-xs font-semibold border border-slate-200 bg-surface text-slate-700 hover:bg-slate-100 disabled:opacity-40 transition flex items-center gap-1"
             >
-              ← Bài trước
+              <ChevronLeft className="w-4 h-4" /> Bài trước
             </button>
             <button
               onClick={() => goTo(activeLessonIdx + 1)}
               disabled={!hasNext}
-              className="px-4 py-2.5 rounded-xl text-xs font-semibold bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-40 transition"
+              className="px-4 py-2.5 rounded-xl text-xs font-semibold bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-40 transition flex items-center gap-1"
             >
-              Bài tiếp theo →
+              Bài tiếp theo <ChevronRight className="w-4 h-4" />
             </button>
           </div>
         </div>
 
-        <aside className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm h-fit">
+        <aside className="bg-surface p-5 rounded-2xl border border-slate-200 shadow-sm h-fit">
           <h3 className="font-bold text-slate-900 text-base mb-1">
             Danh Sách Bài Học
           </h3>
@@ -219,8 +241,11 @@ const StudyRoom = ({ course }) => {
                     <span className="truncate">{lesson.title}</span>
                   </div>
                   {finished && (
-                    <span className="text-emerald-600 font-bold ml-2" aria-label="Đã hoàn thành">
-                      ✓
+                    <span
+                      className="text-emerald-600 dark:text-emerald-400 font-bold ml-2"
+                      aria-label="Đã hoàn thành"
+                    >
+                      <Check className="w-4 h-4" />
                     </span>
                   )}
                 </button>

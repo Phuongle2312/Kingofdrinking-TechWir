@@ -69,7 +69,10 @@ Nguyên tắc:
 
     return text
       ? { ok: true, text }
-      : { ok: false, text: "AI chưa có câu trả lời phù hợp. Bạn thử hỏi lại nhé." };
+      : {
+          ok: false,
+          text: "AI chưa có câu trả lời phù hợp. Bạn thử hỏi lại nhé.",
+        };
   } catch (error) {
     const message =
       error.name === "AbortError"
